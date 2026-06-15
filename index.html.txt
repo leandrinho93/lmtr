@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LMTR – Tecnologia que transforma rotinas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810;
+    --surface: #0f0f1a;
+    --surface2: #161625;
+    --border: rgba(255,255,255,0.07);
+    --accent: #00ffb2;
+    --accent2: #7c5cfc;
+    --accent3: #ff4f7a;
+    --text: #f0f0f8;
+    --muted: #7a7a9a;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(8,8,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem; font-weight: 900;
+    letter-spacing: -1px;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.5px;
+    transition: color 0.2s;
+    text-transform: uppercase;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent); color: #080810;
+    padding: 10px 22px; border-radius: 8px;
+    font-weight: 700; font-size: 0.85rem; text-decoration: none;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    transition: opacity 0.2s;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+  }
+
+  .hero-glow {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 500px;
+    background: radial-gradient(ellipse, rgba(124,92,252,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 4px;
+    color: var(--accent); text-transform: uppercase;
+    background: rgba(0,255,178,0.08);
+    border: 1px solid rgba(0,255,178,0.2);
+    padding: 8px 20px; border-radius: 100px;
+    margin-bottom: 36px; display: inline-block;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900; line-height: 1;
+    letter-spacing: -3px; margin-bottom: 32px;
+  }
+
+  .hero h1 .line-accent { color: var(--accent); }
+  .hero h1 .line-dim { color: var(--muted); }
+
+  .hero-sub {
+    font-size: 1.15rem; color: var(--muted);
+    max-width: 600px; line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  .hero-actions {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+
+  .btn-primary {
+    background: var(--accent); color: #080810;
+    padding: 14px 32px; border-radius: 10px;
+    font-weight: 700; font-size: 0.95rem; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+
+  .btn-outline {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border);
+    padding: 14px 32px; border-radius: 10px;
+    font-weight: 500; font-size: 0.95rem; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .btn-outline:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  /* ── SCROLL INDICATOR ── */
+  .scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--muted); font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  .scroll-indicator::after {
+    content: '';
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 24px; max-width: 1200px; margin: 0 auto; }
+
+  .section-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 4px;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 16px; display: block;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900; letter-spacing: -2px;
+    line-height: 1.05; margin-bottom: 20px;
+  }
+
+  .section-sub {
+    font-size: 1.05rem; color: var(--muted);
+    max-width: 560px; line-height: 1.7;
+  }
+
+  /* ── DIVIDER ── */
+  .full-divider {
+    width: 100%; height: 1px;
+    background: var(--border);
+    margin: 0;
+  }
+
+  /* ── SOBRE / LEANDRO ── */
+  .sobre-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+    margin-top: 60px;
+  }
+
+  .sobre-foto {
+    aspect-ratio: 3/4;
+    background: var(--surface2);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px;
+    color: var(--muted); font-size: 0.8rem; text-align: center;
+    padding: 20px;
+    position: relative; overflow: hidden;
+  }
+
+  .sobre-foto::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(124,92,252,0.08), transparent);
+  }
+
+  .sobre-foto .foto-icon {
+    font-size: 3rem; opacity: 0.3;
+  }
+
+  .sobre-foto .foto-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent);
+    opacity: 0.6;
+  }
+
+  .sobre-texto h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem; font-weight: 900;
+    letter-spacing: -1px; margin-bottom: 24px;
+    line-height: 1.1;
+  }
+
+  .sobre-texto p {
+    color: var(--muted); line-height: 1.8;
+    margin-bottom: 16px; font-size: 0.98rem;
+  }
+
+  .sobre-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin-top: 32px;
+  }
+
+  .stat-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px;
+  }
+
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 900;
+    color: var(--accent); letter-spacing: -1px;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.78rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  /* ── APPS GRID ── */
+  .apps-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 60px; flex-wrap: wrap; gap: 20px;
+  }
+
+  .apps-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .app-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px;
+    transition: border-color 0.3s, transform 0.2s;
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+    gap: 20px;
+  }
+
+  .app-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--card-accent, var(--accent));
+  }
+
+  .app-card:hover {
+    border-color: rgba(255,255,255,0.15);
+    transform: translateY(-4px);
+  }
+
+  .app-card.featured {
+    grid-column: span 2;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .app-icon {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+  }
+
+  .app-tag {
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+    color: var(--card-accent, var(--accent));
+    background: rgba(0,255,178,0.06);
+    border: 1px solid rgba(0,255,178,0.15);
+    padding: 4px 12px; border-radius: 100px;
+    display: inline-block; margin-bottom: 4px;
+  }
+
+  .app-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .app-desc {
+    color: var(--muted); line-height: 1.7;
+    font-size: 0.92rem;
+  }
+
+  .app-features {
+    list-style: none; display: flex; flex-direction: column; gap: 8px;
+    margin-top: 4px;
+  }
+
+  .app-features li {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.85rem; color: var(--muted);
+  }
+
+  .app-features li::before {
+    content: '→';
+    color: var(--card-accent, var(--accent));
+    font-weight: 700; flex-shrink: 0;
+  }
+
+  .app-links {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .store-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text); text-decoration: none;
+    padding: 10px 18px; border-radius: 9px;
+    font-size: 0.82rem; font-weight: 500;
+    transition: border-color 0.2s;
+  }
+
+  .store-btn:hover { border-color: var(--card-accent, var(--accent)); }
+
+  .app-mockup {
+    background: var(--surface);
+    border-radius: 14px; border: 1px solid var(--border);
+    aspect-ratio: 9/16; max-height: 320px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 0.75rem; text-align: center;
+    flex-direction: column; gap: 10px; padding: 20px;
+  }
+
+  /* ── UPCOMING ── */
+  .upcoming-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; margin-top: 60px;
+  }
+
+  .upcoming-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px;
+    position: relative;
+  }
+
+  .upcoming-badge {
+    position: absolute; top: 20px; right: 20px;
+    font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+    background: rgba(255,79,122,0.1);
+    border: 1px solid rgba(255,79,122,0.3);
+    color: var(--accent3); padding: 4px 10px; border-radius: 6px;
+  }
+
+  .upcoming-icon { font-size: 2rem; margin-bottom: 16px; }
+
+  .upcoming-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem; font-weight: 800;
+    margin-bottom: 10px; letter-spacing: -0.3px;
+  }
+
+  .upcoming-desc {
+    font-size: 0.87rem; color: var(--muted); line-height: 1.6;
+  }
+
+  /* ── MANIFESTO ── */
+  .manifesto {
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 100px 24px;
+    text-align: center;
+  }
+
+  .manifesto-inner { max-width: 860px; margin: 0 auto; }
+
+  .manifesto blockquote {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800; line-height: 1.2;
+    letter-spacing: -1.5px; color: var(--text);
+  }
+
+  .manifesto blockquote span { color: var(--accent); }
+  .manifesto blockquote em { color: var(--accent2); font-style: normal; }
+
+  .manifesto-author {
+    margin-top: 32px; font-size: 0.85rem;
+    color: var(--muted); letter-spacing: 1px;
+  }
+
+  /* ── SOCIAL ── */
+  .social-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px; margin-top: 60px;
+  }
+
+  .social-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px 20px;
+    text-align: center; text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s, transform 0.2s;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 12px;
+  }
+
+  .social-card:hover {
+    border-color: var(--social-color);
+    transform: translateY(-4px);
+  }
+
+  .social-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    color: var(--social-color);
+  }
+
+  .social-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem; font-weight: 800;
+  }
+
+  .social-handle {
+    font-size: 0.78rem; color: var(--muted);
+  }
+
+  /* ── CONTATO ── */
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; margin-top: 60px; align-items: start;
+  }
+
+  .contact-form {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+
+  .form-group {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  .form-group label {
+    font-size: 0.78rem; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+    outline: none;
+    width: 100%;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--accent);
+  }
+
+  .form-group textarea {
+    min-height: 140px; resize: vertical;
+  }
+
+  .form-submit {
+    background: var(--accent); color: #080810;
+    border: none; padding: 16px;
+    border-radius: 10px; font-weight: 700;
+    font-size: 1rem; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    transition: opacity 0.2s;
+  }
+
+  .form-submit:hover { opacity: 0.9; }
+
+  .contact-info {
+    display: flex; flex-direction: column; gap: 20px;
+  }
+
+  .contact-info-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px;
+  }
+
+  .contact-info-icon {
+    width: 44px; height: 44px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+
+  .contact-info-text strong {
+    display: block; font-weight: 600; margin-bottom: 3px;
+  }
+
+  .contact-info-text span {
+    font-size: 0.88rem; color: var(--muted);
+  }
+
+  .contact-info-text a {
+    color: var(--accent); text-decoration: none;
+    font-size: 0.88rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 50px 60px;
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 24px;
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem; font-weight: 900;
+    color: var(--text); text-decoration: none;
+  }
+
+  .footer-logo span { color: var(--accent); }
+
+  .footer-copy {
+    font-size: 0.82rem; color: var(--muted);
+  }
+
+  .footer-links {
+    display: flex; gap: 24px; list-style: none;
+  }
+
+  .footer-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.82rem;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ── TICKER ── */
+  .ticker-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0; background: var(--surface);
+  }
+
+  .ticker {
+    display: flex; gap: 60px;
+    white-space: nowrap;
+    animation: ticker 20s linear infinite;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 3px;
+    color: var(--muted); text-transform: uppercase;
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .ticker span { color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    .sobre-grid { grid-template-columns: 1fr; gap: 40px; }
+    .apps-grid { grid-template-columns: 1fr; }
+    .app-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+    .upcoming-grid { grid-template-columns: 1fr 1fr; }
+    .social-grid { grid-template-columns: 1fr 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    footer { padding: 40px 24px; flex-direction: column; text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+    .upcoming-grid { grid-template-columns: 1fr; }
+    section { padding: 70px 20px; }
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1; transform: translateY(0);
+  }
+
+  .stagger-1 { transition-delay: 0.1s; }
+  .stagger-2 { transition-delay: 0.2s; }
+  .stagger-3 { transition-delay: 0.3s; }
+  .stagger-4 { transition-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">LM<span>T</span>R</a>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#apps">Apps</a></li>
+    <li><a href="#futuros">Projetos</a></li>
+    <li><a href="#social">Redes</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <a href="#contato" class="nav-cta">Falar Comigo</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <p class="hero-tag">LMTR · Desenvolvimento de Software</p>
+  <h1>
+    <span>Tecnologia</span><br>
+    <span class="line-dim">que transforma</span><br>
+    <span class="line-accent">rotinas reais.</span>
+  </h1>
+  <p class="hero-sub">
+    Criando aplicativos que nascem das necessidades do dia a dia. Soluções práticas, acessíveis e com impacto real na vida das pessoas.
+  </p>
+  <div class="hero-actions">
+    <a href="#apps" class="btn-primary">Ver nossos Apps →</a>
+    <a href="#sobre" class="btn-outline">Sobre o Leandro</a>
+  </div>
+  <div class="scroll-indicator">Scroll</div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>Meta na Pista</span> · Estratégia Loteria · <span>Bate-Papo da Baixada</span> · Mercado de Usados · <span>Despertador Inteligente</span> · Serviços e Mão de Obra · <span>Político na Lupa</span> · SaaS Social ·
+    <span>Meta na Pista</span> · Estratégia Loteria · <span>Bate-Papo da Baixada</span> · Mercado de Usados · <span>Despertador Inteligente</span> · Serviços e Mão de Obra · <span>Político na Lupa</span> · SaaS Social ·
+  </div>
+</div>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <span class="section-tag">// 001 · Sobre</span>
+  <h2 class="section-title">Olá, eu sou<br><span style="color:var(--accent)">Leandro</span></h2>
+  <div class="sobre-grid">
+    <div class="sobre-foto fade-up">
+      <div class="foto-icon">📸</div>
+      <span class="foto-label">Foto do Desenvolvedor</span>
+      <span style="font-size:0.72rem; margin-top:8px;">[ Espaço reservado para sua foto ]</span>
+    </div>
+    <div class="sobre-texto fade-up stagger-2">
+      <h2>Desenvolvedor independente da Baixada Fluminense</h2>
+      <p>
+        Sou Leandro, fundador da LMTR — uma empresa de desenvolvimento de software criada com um propósito claro: <strong style="color:var(--text)">resolver problemas reais das pessoas ao redor</strong>.
+      </p>
+      <p>
+        Nasci e cresci na Baixada Fluminense. Esse contexto moldou minha visão: aqui existe muita demanda por tecnologia acessível, mas poucas soluções pensadas de verdade para quem vive essa realidade. Foi daí que surgiram os meus projetos.
+      </p>
+      <p>
+        Comecei desenvolvendo o <strong style="color:var(--accent)">Meta na Pista</strong>, um gerenciador financeiro para motoristas de aplicativo, e o <strong style="color:var(--accent)">Estratégia Loteria</strong>. Hoje o ecossistema LMTR cresce com novos projetos em desenvolvimento que conectam, informam e organizam a vida real das pessoas.
+      </p>
+      <p style="font-size:0.88rem; font-style:italic; color:var(--muted); border-left:3px solid var(--accent2); padding-left:16px; margin-top:24px;">
+        "Não esperei a tecnologia chegar até mim. Aprendi a construir o que precisava."
+      </p>
+      <div class="sobre-stats" style="margin-top:36px;">
+        <div class="stat-box">
+          <span class="stat-number">5+</span>
+          <span class="stat-label">Apps lançados</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-number">BF</span>
+          <span class="stat-label">Baixada Fluminense · RJ</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-number">Android</span>
+          <span class="stat-label">Plataforma principal</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Independente</span>
+        </div>
+      </div>
+
+      <!-- GALERIA DE FOTOS -->
+      <div style="margin-top:32px;">
+        <p style="font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; font-family:'Space Mono',monospace;">Galeria · Trajetória</p>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+          <div style="aspect-ratio:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--muted);text-align:center;padding:8px;">Foto 1</div>
+          <div style="aspect-ratio:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--muted);text-align:center;padding:8px;">Foto 2</div>
+          <div style="aspect-ratio:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--muted);text-align:center;padding:8px;">Foto 3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- APPS ATUAIS -->
+<section id="apps">
+  <div class="apps-header">
+    <div>
+      <span class="section-tag">// 002 · Produtos</span>
+      <h2 class="section-title">Apps na Play Store</h2>
+    </div>
+    <p class="section-sub" style="max-width:340px;">Aplicativos publicados e disponíveis para download agora.</p>
+  </div>
+
+  <div class="apps-grid">
+
+    <!-- META NA PISTA – FEATURED -->
+    <div class="app-card featured fade-up" style="--card-accent:#00ffb2;">
+      <div>
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+          <div class="app-icon">🚗</div>
+          <div>
+            <span class="app-tag">Disponível · Play Store</span>
+            <h3 class="app-name">Meta na Pista</h3>
+          </div>
+        </div>
+        <p class="app-desc">
+          O gerenciador financeiro definitivo para motoristas de aplicativo. Acompanhe suas metas, lucros, custos de manutenção e documentos com precisão. O app que faz o motorista entender de verdade quanto ele ganha — e quanto ele gasta.
+        </p>
+        <ul class="app-features" style="margin-top:20px;">
+          <li>Controle de ganhos por plataforma (Uber, 99, iFood etc.)</li>
+          <li>Manutenção preventiva automatizada por KM</li>
+          <li>Metas diárias com barra de progresso animada</li>
+          <li>Widget nativo para tela inicial do Android</li>
+          <li>Relatório anual em PDF exportável</li>
+          <li>Gestão de Banca Inteligente para motoristas</li>
+        </ul>
+        <div class="app-links">
+          <a href="https://play.google.com/store/apps/details?id=com.lmtr.metanapista" target="_blank" class="store-btn">
+            ▶ Google Play Store
+          </a>
+        </div>
+      </div>
+      <div class="app-mockup">
+        <span style="font-size:2rem;">📱</span>
+        <span style="font-size:0.7rem;color:var(--muted);">[ Print do App ]<br>Espaço para screenshot ]</span>
+      </div>
+    </div>
+
+    <!-- ESTRATÉGIA LOTERIA -->
+    <div class="app-card fade-up stagger-1" style="--card-accent:#7c5cfc;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="app-icon">🍀</div>
+        <div>
+          <span class="app-tag" style="color:var(--accent2);background:rgba(124,92,252,0.08);border-color:rgba(124,92,252,0.2);">Disponível · Play Store</span>
+          <h3 class="app-name">Estratégia Loteria</h3>
+        </div>
+      </div>
+      <p class="app-desc">
+        Motor estatístico para geração de palpites nas Loterias Caixa. Fibonacci, Grabovoi, análise de frequência e bolão entre amigos — tudo num só lugar.
+      </p>
+      <ul class="app-features">
+        <li>Motor matemático com Fibonacci e Grabovoi</li>
+        <li>Suporte a todas as loterias da Caixa</li>
+        <li>Bolão entre amigos com link de importação</li>
+        <li>Conferência automática de resultados</li>
+      </ul>
+      <div class="app-links">
+        <a href="https://play.google.com/store/apps/details?id=com.lmtr.SorteadorDeLoteria" target="_blank" class="store-btn">
+          ▶ Google Play Store
+        </a>
+      </div>
+    </div>
+
+    <!-- DESPERTADOR INTELIGENTE -->
+    <div class="app-card fade-up stagger-2" style="--card-accent:#ff9a3c;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="app-icon">⏰</div>
+        <div>
+          <span class="app-tag" style="color:#ff9a3c;background:rgba(255,154,60,0.08);border-color:rgba(255,154,60,0.2);">Android</span>
+          <h3 class="app-name">Despertador Inteligente</h3>
+        </div>
+      </div>
+      <p class="app-desc">
+        Muito mais que um alarme. Um assistente matinal integrado com avisos essenciais, lembretes personalizados e informações úteis para começar o dia organizado.
+      </p>
+      <ul class="app-features">
+        <li>Sistema integrado de lembretes e avisos</li>
+        <li>Informações úteis ao acordar</li>
+        <li>Personalização completa por rotina</li>
+      </ul>
+      <div class="app-links">
+        <a href="https://play.google.com/store/search?q=lmtr&c=apps" target="_blank" class="store-btn">
+          ▶ Ver na Play Store
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- MANIFESTO -->
+<div class="manifesto">
+  <div class="manifesto-inner fade-up">
+    <blockquote>
+      "Toda solução que construo <span>nasce de um problema real</span> que eu vi alguém próximo enfrentar. <em>Tecnologia sem propósito</em> é só código."
+    </blockquote>
+    <p class="manifesto-author">— Leandro · Fundador da LMTR</p>
+  </div>
+</div>
+
+<!-- PROJETOS FUTUROS -->
+<section id="futuros">
+  <span class="section-tag">// 003 · Em Desenvolvimento</span>
+  <h2 class="section-title">Próximos<br>Projetos</h2>
+  <p class="section-sub">O ecossistema LMTR está em expansão. Veja o que vem por aí:</p>
+
+  <div class="upcoming-grid">
+
+    <div class="upcoming-card fade-up">
+      <span class="upcoming-badge">Em breve</span>
+      <div class="upcoming-icon">💬</div>
+      <h3 class="upcoming-title">Bate-Papo da Baixada Fluminense</h3>
+      <p class="upcoming-desc">
+        Um aplicativo de comunicação criado exclusivamente para a comunidade da Baixada Fluminense. Conectando moradores, fortale­cendo a identidade local e encurtando distâncias com tecnologia feita para quem é daqui.
+      </p>
+    </div>
+
+    <div class="upcoming-card fade-up stagger-1">
+      <span class="upcoming-badge">Em desenvolvimento</span>
+      <div class="upcoming-icon">📊</div>
+      <h3 class="upcoming-title">SaaS de Gestão de Redes Sociais</h3>
+      <p class="upcoming-desc">
+        Plataforma completa para pequenos negócios e criadores de conteúdo gerenciarem todas as suas redes em um único painel. Agendamento, análise de métricas, relatórios e automações inteligentes sem precisar de agência.
+      </p>
+    </div>
+
+    <div class="upcoming-card fade-up stagger-2">
+      <span class="upcoming-badge">Pesquisa</span>
+      <div class="upcoming-icon">🏛️</div>
+      <h3 class="upcoming-title">Político na Lupa</h3>
+      <p class="upcoming-desc">
+        Plataforma de transparência política. Saiba tudo sobre os mandatos, votações, gastos e histórico dos seus representantes. Informação clara e acessível para o cidadão comum acompanhar quem governa sua cidade, estado e país.
+      </p>
+    </div>
+
+    <div class="upcoming-card fade-up">
+      <span class="upcoming-badge">Em breve</span>
+      <div class="upcoming-icon">🛒</div>
+      <h3 class="upcoming-title">Mercado de Usados</h3>
+      <p class="upcoming-desc">
+        Marketplace hiperlocal para compra e venda de itens usados. Prático, seguro e pensado para conectar vizinhos. Incentivando a economia circular e o consumo consciente na comunidade.
+      </p>
+    </div>
+
+    <div class="upcoming-card fade-up stagger-1">
+      <span class="upcoming-badge">Planejado</span>
+      <div class="upcoming-icon">🔧</div>
+      <h3 class="upcoming-title">Serviços e Mão de Obra</h3>
+      <p class="upcoming-desc">
+        Conectando quem precisa resolver um problema com quem sabe fazer. Eletricistas, encanadores, pedreiros e outros profissionais da região com sistema de avaliação, portfólio e agendamento.
+      </p>
+    </div>
+
+    <div class="upcoming-card fade-up stagger-2" style="background: linear-gradient(135deg, rgba(0,255,178,0.04), var(--surface2)); border-color: rgba(0,255,178,0.15);">
+      <span class="upcoming-badge" style="background:rgba(0,255,178,0.1); border-color:rgba(0,255,178,0.3); color:var(--accent);">Aberto</span>
+      <div class="upcoming-icon">💡</div>
+      <h3 class="upcoming-title">Tem uma ideia?</h3>
+      <p class="upcoming-desc">
+        Estou sempre de olho em problemas reais que pedem solução tecnológica. Se você tem uma dor que virou rotina e acha que daria um bom produto, me conta. Seria um prazer conversar.
+      </p>
+      <a href="#contato" class="btn-primary" style="margin-top:20px;font-size:0.85rem;padding:10px 20px;">Falar com Leandro →</a>
+    </div>
+
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- REDES SOCIAIS -->
+<section id="social">
+  <span class="section-tag">// 004 · Redes Sociais</span>
+  <h2 class="section-title">Me encontre<br>online</h2>
+  <p class="section-sub">Acompanhe o desenvolvimento dos projetos, bastidores e novidades da LMTR.</p>
+
+  <div class="social-grid">
+    <a href="https://youtube.com/@LMTR" target="_blank" class="social-card" style="--social-color:#ff0000;">
+      <div class="social-icon">▶</div>
+      <span class="social-name">YouTube</span>
+      <span class="social-handle">@LMTR</span>
+      <span style="font-size:0.75rem;color:var(--muted);">Tutoriais e bastidores</span>
+    </a>
+    <a href="https://instagram.com/lmtr.dev" target="_blank" class="social-card" style="--social-color:#e1306c;">
+      <div class="social-icon">📸</div>
+      <span class="social-name">Instagram</span>
+      <span class="social-handle">@lmtr.dev</span>
+      <span style="font-size:0.75rem;color:var(--muted);">Updates e projetos</span>
+    </a>
+    <a href="https://tiktok.com/@lmtr.dev" target="_blank" class="social-card" style="--social-color:#69c9d0;">
+      <div class="social-icon">♪</div>
+      <span class="social-name">TikTok</span>
+      <span class="social-handle">@lmtr.dev</span>
+      <span style="font-size:0.75rem;color:var(--muted);">Dev life e dicas</span>
+    </a>
+    <a href="https://wa.me/55SEUNUMERO" target="_blank" class="social-card" style="--social-color:#25d366;">
+      <div class="social-icon">💬</div>
+      <span class="social-name">WhatsApp</span>
+      <span class="social-handle">Contato direto</span>
+      <span style="font-size:0.75rem;color:var(--muted);">Parcerias e projetos</span>
+    </a>
+  </div>
+
+  <!-- YouTube Embed Placeholder -->
+  <div style="margin-top:40px; background:var(--surface2); border:1px solid var(--border); border-radius:16px; overflow:hidden;">
+    <div style="padding:24px 28px; border-bottom:1px solid var(--border); display:flex;align-items:center;gap:14px;">
+      <div style="width:36px;height:36px;background:#ff0000;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.9rem;">▶</div>
+      <div>
+        <p style="font-weight:600;font-size:0.95rem;">Canal LMTR no YouTube</p>
+        <p style="font-size:0.78rem;color:var(--muted);">Substitua o ID abaixo pelo seu canal real</p>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;padding-bottom:45%;background:#000;">
+      <iframe
+        style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+        src="https://www.youtube.com/embed?listType=user_uploads&list=LMTR"
+        title="Canal LMTR YouTube"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);color:var(--muted);font-size:0.85rem;text-align:center;padding:20px;">
+        ▶ Cole aqui o ID do seu canal YouTube para exibir os vídeos
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- CONTATO -->
+<section id="contato">
+  <span class="section-tag">// 005 · Contato</span>
+  <h2 class="section-title">Vamos<br>conversar?</h2>
+  <p class="section-sub">Parcerias, sugestões de produtos, feedback ou só um oi — pode mandar.</p>
+
+  <div class="contact-grid">
+    <form class="contact-form fade-up" onsubmit="handleForm(event)">
+      <div class="form-group">
+        <label>Seu nome</label>
+        <input type="text" placeholder="Como posso te chamar?" required>
+      </div>
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" placeholder="seu@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Assunto</label>
+        <select>
+          <option value="">Selecione um assunto</option>
+          <option>Parceria / Negócio</option>
+          <option>Sugestão de produto</option>
+          <option>Suporte aos apps</option>
+          <option>Contato geral</option>
+          <option>Imprensa</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Mensagem</label>
+        <textarea placeholder="Conte o que você tem em mente..." required></textarea>
+      </div>
+      <button type="submit" class="form-submit">Enviar Mensagem →</button>
+      <p id="form-msg" style="display:none;font-size:0.85rem;color:var(--accent);text-align:center;margin-top:8px;">✓ Mensagem enviada! Retorno em breve.</p>
+    </form>
+
+    <div class="contact-info fade-up stagger-2">
+      <div class="contact-info-item">
+        <div class="contact-info-icon">✉️</div>
+        <div class="contact-info-text">
+          <strong>E-mail</strong>
+          <a href="mailto:lmtr.contato@gmail.com">lmtr.contato@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-icon">💬</div>
+        <div class="contact-info-text">
+          <strong>WhatsApp</strong>
+          <a href="https://wa.me/55SEUNUMERO" target="_blank">Clique para abrir conversa</a>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-icon">📍</div>
+        <div class="contact-info-text">
+          <strong>Localização</strong>
+          <span>Baixada Fluminense · Rio de Janeiro, Brasil</span>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-icon">🕐</div>
+        <div class="contact-info-text">
+          <strong>Resposta</strong>
+          <span>Geralmente em até 48 horas úteis</span>
+        </div>
+      </div>
+
+      <!-- Play Store Link Block -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:4px;">
+        <p style="font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-family:'Space Mono',monospace;">Apps na Play Store</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="https://play.google.com/store/apps/details?id=com.lmtr.metanapista" target="_blank" style="display:flex;align-items:center;gap:12px;text-decoration:none;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:9px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='#00ffb2'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:1.2rem;">🚗</span>
+            <div>
+              <p style="font-size:0.85rem;font-weight:600;color:var(--text);">Meta na Pista</p>
+              <p style="font-size:0.72rem;color:var(--muted);">Google Play Store →</p>
+            </div>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.lmtr.SorteadorDeLoteria" target="_blank" style="display:flex;align-items:center;gap:12px;text-decoration:none;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:9px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='#7c5cfc'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:1.2rem;">🍀</span>
+            <div>
+              <p style="font-size:0.85rem;font-weight:600;color:var(--text);">Estratégia Loteria</p>
+              <p style="font-size:0.72rem;color:var(--muted);">Google Play Store →</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">LM<span>T</span>R</a>
+  <ul class="footer-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#apps">Apps</a></li>
+    <li><a href="#futuros">Projetos</a></li>
+    <li><a href="#contato">Contato</a></li>
+    <li><a href="https://sites.google.com/view/sorteadorloteria/início" target="_blank">Privacidade</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 LMTR · Todos os direitos reservados · Baixada Fluminense · RJ</p>
+</footer>
+
+<script>
+  // SCROLL ANIMATION
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // FORM HANDLER
+  function handleForm(e) {
+    e.preventDefault();
+    const msg = document.getElementById('form-msg');
+    msg.style.display = 'block';
+    e.target.reset();
+    setTimeout(() => msg.style.display = 'none', 5000);
+  }
+
+  // NAV ACTIVE HIGHLIGHT
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+</script>
+
+</body>
+</html>
