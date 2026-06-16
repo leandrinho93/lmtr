@@ -20,6 +20,12 @@
     --radius: 16px;
   }
 
+  /* CORES DA LOGO LMTR */
+  .lmtr-l { color: #00ffb2; } /* Verde Claro */
+  .lmtr-m { color: #00bfff; } /* Azul Claro */
+  .lmtr-t { color: #191970; } /* Azul Escuro (Midnight Blue) */
+  .lmtr-r { color: #ff0000; } /* Vermelho */
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html { scroll-behavior: smooth; }
@@ -53,11 +59,8 @@
     font-family: 'Syne', sans-serif;
     font-size: 1.6rem; font-weight: 900;
     letter-spacing: -1px;
-    color: var(--text);
     text-decoration: none;
   }
-
-  .nav-logo span { color: var(--accent); }
 
   .nav-links {
     display: flex; gap: 36px; list-style: none;
@@ -218,12 +221,6 @@
     position: relative; overflow: hidden;
   }
 
-  .sobre-foto::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(124,92,252,0.08), transparent);
-  }
-
   .sobre-texto h2 {
     font-family: 'Syne', sans-serif;
     font-size: 2.4rem; font-weight: 900;
@@ -296,6 +293,16 @@
     grid-column: span 2;
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 40px;
+  }
+
+  /* INVERSÃO DE LAYOUT PARA DESKTOP */
+  @media (min-width: 901px) {
+    .app-card.featured.alt-layout .app-content {
+      order: 2;
+    }
+    .app-card.featured.alt-layout .app-mockup {
+      order: 1;
+    }
   }
 
   .app-icon {
@@ -385,6 +392,29 @@
   }
   .cover-banner img { width: 100%; height: 100%; object-fit: cover; }
 
+  /* CAIXA DE PROMOÇÃO */
+  .promo-box {
+    margin-top: 20px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed var(--card-accent);
+    border-radius: 12px;
+  }
+  
+  .promo-title {
+    font-size: 0.85rem; font-weight: bold; color: var(--card-accent); margin-bottom: 8px;
+  }
+
+  .promo-key {
+    font-family: 'Space Mono', monospace; font-size: 1.2rem; font-weight: 900; letter-spacing: 2px;
+    text-align: center; background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .promo-disclaimer {
+    font-size: 0.75rem; color: var(--muted); margin-top: 10px; line-height: 1.5;
+  }
+
   /* ── UPCOMING ── */
   .upcoming-grid {
     display: grid; grid-template-columns: repeat(3, 1fr);
@@ -437,7 +467,6 @@
     letter-spacing: -1.5px; color: var(--text);
   }
 
-  .manifesto blockquote span { color: var(--accent); }
   .manifesto blockquote em { color: var(--accent2); font-style: normal; }
 
   .manifesto-author {
@@ -584,10 +613,8 @@
   .footer-logo {
     font-family: 'Syne', sans-serif;
     font-size: 1.4rem; font-weight: 900;
-    color: var(--text); text-decoration: none;
+    text-decoration: none;
   }
-
-  .footer-logo span { color: var(--accent); }
 
   .footer-copy {
     font-size: 0.82rem; color: var(--muted);
@@ -669,7 +696,9 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">LM<span>T</span>R</a>
+  <a href="#" class="nav-logo">
+    <span class="lmtr-l">L</span><span class="lmtr-m">M</span><span class="lmtr-t">T</span><span class="lmtr-r">R</span>
+  </a>
   <ul class="nav-links">
     <li><a href="#sobre">Sobre a Empresa</a></li>
     <li><a href="#apps">Apps</a></li>
@@ -710,7 +739,9 @@
 <!-- SOBRE A EMPRESA -->
 <section id="sobre">
   <span class="section-tag">// 001 · Sobre a Empresa</span>
-  <h2 class="section-title">Nós somos a<br><span style="color:var(--accent)">LMTR</span></h2>
+  <h2 class="section-title">Nós somos a<br>
+    <span class="lmtr-l">L</span><span class="lmtr-m">M</span><span class="lmtr-t">T</span><span class="lmtr-r">R</span>
+  </h2>
   <div class="sobre-grid">
     <div class="sobre-foto fade-up" style="border:none; background:transparent; padding:0;">
       <img src="lmtr-logo.png.png" alt="Logo LMTR Software House" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(0,255,178,0.15));">
@@ -764,7 +795,7 @@
 
     <!-- META NA PISTA – FEATURED -->
     <div class="app-card featured fade-up" style="--card-accent:#00ffb2;">
-      <div>
+      <div class="app-content">
         <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
           <div class="app-icon" style="background:transparent; border:none;">
               <img src="meta-na-pista.png.ico" alt="Icone Meta na Pista">
@@ -774,16 +805,25 @@
             <h3 class="app-name">Meta na Pista</h3>
           </div>
         </div>
+        <div class="cover-banner">
+            <img src="capa-meta-na-pista.png.jpg" alt="Capa Meta na Pista">
+        </div>
         <p class="app-desc">
-          O gerenciador financeiro definitivo para motoristas de aplicativo. Acompanhe suas metas, lucros, custos de manutenção e documentos com precisão. Desenvolvido com uma <strong>arquitetura Híbrida Offline-First</strong>, ele permite o uso pleno em áreas sem internet, enquanto integra um forte sistema de métricas, widgets nativos, geração de PDF de faturamento e proteção contra manipulação de relógios para assegurar o sistema de contas Premium (via Google Play Billing).
+          O gerenciador financeiro definitivo para motoristas de aplicativo. Acompanhe suas metas, lucros, custos de manutenção e documentos com precisão. Desenvolvido com uma <strong>arquitetura Híbrida Offline-First</strong>, ele permite o uso pleno em áreas sem internet.
         </p>
         <ul class="app-features" style="margin-top:20px;">
           <li>Controle de ganhos por plataforma (Uber, 99, iFood etc.)</li>
           <li>Manutenção preventiva automatizada por KM</li>
           <li>Gestão Inteligente Preditiva de Banca</li>
-          <li>Widget nativo para tela inicial do Android</li>
-          <li>Relatório anual em PDF exportável</li>
         </ul>
+
+        <!-- PROMO BOX -->
+        <div class="promo-box">
+            <p class="promo-title">🎁 Chave Promocional (Nova a cada 15 dias!)</p>
+            <p class="promo-key"><span id="promo-meta">GERANDO...</span></p>
+            <p class="promo-disclaimer">* Em datas comemorativas, o app será liberado para uso gratuito (sujeito à administração da LMTR).</p>
+        </div>
+
         <div class="app-links">
           <a href="https://play.google.com/store/apps/details?id=com.lmtr.metanapista" target="_blank" class="store-btn">
             ▶ Google Play Store
@@ -796,9 +836,9 @@
       </div>
     </div>
 
-    <!-- ESTRATÉGIA LOTERIA -->
-    <div class="app-card featured fade-up stagger-1" style="--card-accent:#7c5cfc;">
-      <div>
+    <!-- ESTRATÉGIA LOTERIA (LAYOUT INVERTIDO COM A CLASSE alt-layout) -->
+    <div class="app-card featured alt-layout fade-up stagger-1" style="--card-accent:#7c5cfc;">
+      <div class="app-content">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
           <div class="app-icon" style="background:transparent; border:none;">
               <img src="estrategia-loteria.png.png" alt="Icone Estratégia Loteria">
@@ -812,14 +852,21 @@
             <img src="capa-estrategia-literia.png.png" alt="Capa Estratégia Loteria">
         </div>
         <p class="app-desc">
-          Um software de altíssimo desempenho para análise de jogos das Loterias Caixa. A arquitetura engloba potentes <strong>Motores Estatísticos Client-Side</strong> (Fibonacci, Grabovoi, Análise de Frequência) para gerar e cruzar dezenas localmente. Destaque para o sistema de "Bolão entre Amigos", que utiliza uma infraestrutura <em>Serverless (Firebase)</em> para hospedar os palpites temporariamente na nuvem, permitindo que os usuários os importem com um clique usando o nosso ecossistema de <em>Deep Linking</em> seguro (Android Intents).
+          Um software de altíssimo desempenho para análise de jogos das Loterias Caixa. A arquitetura engloba potentes <strong>Motores Estatísticos Client-Side</strong> (Fibonacci, Grabovoi, Análise de Frequência) para gerar e cruzar dezenas localmente. Destaque para o sistema de "Bolão entre Amigos" hospedado em nuvem.
         </p>
         <ul class="app-features" style="margin-top:20px;">
-          <li>Motores matemáticos: Fibonacci, Frequência Quente/Fria e Unificado</li>
-          <li>Conferência autônoma e inteligente de resultados oficiais</li>
-          <li>Compartilhamento de cotas de bolões com importação por link ou código</li>
-          <li>Interface analítica com gráficos de assertividade (IA local)</li>
+          <li>Motores matemáticos e Inteligência Artificial Local</li>
+          <li>Conferência autônoma de resultados oficiais</li>
+          <li>Compartilhamento de cotas via código e links seguros</li>
         </ul>
+
+        <!-- PROMO BOX -->
+        <div class="promo-box" style="background:rgba(124,92,252,0.02); border-color:var(--accent2);">
+            <p class="promo-title" style="color:var(--accent2);">🎁 Chave Promocional (Nova a cada 15 dias!)</p>
+            <p class="promo-key"><span id="promo-loteria">GERANDO...</span></p>
+            <p class="promo-disclaimer">* Em datas comemorativas, o app será liberado para uso gratuito (sujeito à administração da LMTR).</p>
+        </div>
+
         <div class="app-links">
           <a href="https://play.google.com/store/apps/details?id=com.lmtr.SorteadorDeLoteria" target="_blank" class="store-btn">
             ▶ Google Play Store
@@ -908,7 +955,7 @@
 <div class="manifesto">
   <div class="manifesto-inner fade-up">
     <blockquote>
-      "Toda solução que a <span>LMTR</span> constrói nasce da vontade de transformar rotinas reais. Desenvolvemos ecossistemas, não apenas <em>códigos.</em>"
+      "Toda solução que a <span class="lmtr-l">L</span><span class="lmtr-m">M</span><span class="lmtr-t">T</span><span class="lmtr-r">R</span> constrói nasce da vontade de transformar rotinas reais. Desenvolvemos ecossistemas, não apenas <em>códigos.</em>"
     </blockquote>
     <p class="manifesto-author">— Visão LMTR</p>
   </div>
@@ -917,7 +964,9 @@
 <!-- REDES SOCIAIS -->
 <section id="social">
   <span class="section-tag">// 004 · Redes Sociais</span>
-  <h2 class="section-title">Acompanhe a<br>LMTR online</h2>
+  <h2 class="section-title">Acompanhe a<br>
+    <span class="lmtr-l">L</span><span class="lmtr-m">M</span><span class="lmtr-t">T</span><span class="lmtr-r">R</span> online
+  </h2>
   <p class="section-sub">Veja o desenvolvimento dos projetos, os bastidores da tecnologia e as novidades que estamos construindo.</p>
 
   <div class="social-grid">
@@ -973,7 +1022,9 @@
 <!-- CONTATO -->
 <section id="contato">
   <span class="section-tag">// 005 · Contato</span>
-  <h2 class="section-title">Fale com a<br>LMTR</h2>
+  <h2 class="section-title">Fale com a<br>
+    <span class="lmtr-l">L</span><span class="lmtr-m">M</span><span class="lmtr-t">T</span><span class="lmtr-r">R</span>
+  </h2>
   <p class="section-sub">Parcerias de negócios, sugestões de produtos, dúvidas técnicas ou feedback — entre em contato.</p>
 
   <div class="contact-grid">
@@ -1053,7 +1104,9 @@
 
 <!-- FOOTER -->
 <footer>
-  <a href="#" class="footer-logo">LM<span>T</span>R</a>
+  <a href="#" class="footer-logo">
+    <span class="lmtr-l">L</span><span class="lmtr-m">M</span><span class="lmtr-t">T</span><span class="lmtr-r">R</span>
+  </a>
   <ul class="footer-links">
     <li><a href="#sobre">A Empresa</a></li>
     <li><a href="#apps">Aplicativos</a></li>
@@ -1065,6 +1118,27 @@
 </footer>
 
 <script>
+  // LÓGICA DE GERAÇÃO DAS CHAVES PROMOCIONAIS (Muda a cada 15 dias)
+  const promocoesMeta = [
+    "PISTA-LIVRE-26", "META-PRO-89", "UBER-META-77", "99-LUCRO-01", "BETA-WIN-99"
+  ];
+  const promocoesLoteria = [
+    "LOTE-LUCK-55", "SINAIS-99", "MEGA-MAX-11", "COTA-FREE-33", "FIBO-PRO-20"
+  ];
+
+  function definirChavesPromocionais() {
+    const agora = new Date();
+    const comecoDoAno = new Date(agora.getFullYear(), 0, 0);
+    const diferencaDias = Math.floor((agora - comecoDoAno) / (1000 * 60 * 60 * 24));
+    
+    // Divide o dia do ano por 15 para saber em qual "ciclo" estamos
+    const indiceMeta = Math.floor(diferencaDias / 15) % promocoesMeta.length;
+    const indiceLoteria = Math.floor(diferencaDias / 15) % promocoesLoteria.length;
+
+    document.getElementById("promo-meta").innerText = promocoesMeta[indiceMeta];
+    document.getElementById("promo-loteria").innerText = promocoesLoteria[indiceLoteria];
+  }
+
   // SCROLL ANIMATION
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
@@ -1096,6 +1170,9 @@
       a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
     });
   });
+
+  // INICIALIZA AS CHAVES ASSIM QUE O SITE CARREGAR
+  document.addEventListener("DOMContentLoaded", definirChavesPromocionais);
 </script>
 
 </body>
