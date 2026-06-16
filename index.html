@@ -199,7 +199,7 @@
     margin: 0;
   }
 
-  /* ── SOBRE / LEANDRO ── */
+  /* ── SOBRE / EMPRESA ── */
   .sobre-grid {
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 80px; align-items: center;
@@ -222,17 +222,6 @@
     content: '';
     position: absolute; inset: 0;
     background: linear-gradient(135deg, rgba(124,92,252,0.08), transparent);
-  }
-
-  .sobre-foto .foto-icon {
-    font-size: 3rem; opacity: 0.3;
-  }
-
-  .sobre-foto .foto-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 2px;
-    text-transform: uppercase; color: var(--accent);
-    opacity: 0.6;
   }
 
   .sobre-texto h2 {
@@ -310,11 +299,15 @@
   }
 
   .app-icon {
-    width: 56px; height: 56px; border-radius: 14px;
+    width: 64px; height: 64px; border-radius: 14px;
     background: var(--surface);
     border: 1px solid var(--border);
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.6rem;
+    overflow: hidden;
+  }
+
+  .app-icon img {
+    width: 100%; height: 100%; object-fit: cover;
   }
 
   .app-tag {
@@ -373,13 +366,24 @@
   .store-btn:hover { border-color: var(--card-accent, var(--accent)); }
 
   .app-mockup {
-    background: var(--surface);
-    border-radius: 14px; border: 1px solid var(--border);
-    aspect-ratio: 9/16; max-height: 320px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--muted); font-size: 0.75rem; text-align: center;
-    flex-direction: column; gap: 10px; padding: 20px;
+    background: transparent;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    height: 100%;
   }
+
+  .app-mockup img {
+    max-height: 380px; width: auto; object-fit: contain;
+    border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: transform 0.3s;
+  }
+  .app-mockup img:hover { transform: translateY(-5px); }
+
+  .cover-banner {
+    width: 100%; height: 180px;
+    border-radius: 12px; margin-bottom: 20px;
+    overflow: hidden; border: 1px solid var(--border);
+  }
+  .cover-banner img { width: 100%; height: 100%; object-fit: cover; }
 
   /* ── UPCOMING ── */
   .upcoming-grid {
@@ -439,6 +443,7 @@
   .manifesto-author {
     margin-top: 32px; font-size: 0.85rem;
     color: var(--muted); letter-spacing: 1px;
+    font-weight: bold; text-transform: uppercase;
   }
 
   /* ── SOCIAL ── */
@@ -640,6 +645,8 @@
   @media (max-width: 600px) {
     .upcoming-grid { grid-template-columns: 1fr; }
     section { padding: 70px 20px; }
+    .app-mockup { flex-direction: column; height: auto; }
+    .app-mockup img { max-height: 250px; }
   }
 
   /* ── ANIMATIONS ── */
@@ -660,20 +667,18 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">LM<span>T</span>R</a>
   <ul class="nav-links">
-    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#sobre">Sobre a Empresa</a></li>
     <li><a href="#apps">Apps</a></li>
     <li><a href="#futuros">Projetos</a></li>
     <li><a href="#social">Redes</a></li>
     <li><a href="#contato">Contato</a></li>
   </ul>
-  <a href="#contato" class="nav-cta">Falar Comigo</a>
+  <a href="#contato" class="nav-cta">Falar Conosco</a>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-glow"></div>
   <p class="hero-tag">LMTR · Desenvolvimento de Software</p>
@@ -687,69 +692,55 @@
   </p>
   <div class="hero-actions">
     <a href="#apps" class="btn-primary">Ver nossos Apps →</a>
-    <a href="#sobre" class="btn-outline">Sobre o Leandro</a>
+    <a href="#sobre" class="btn-outline">Conheça a LMTR</a>
   </div>
   <div class="scroll-indicator">Scroll</div>
 </div>
 
-<!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker">
-    <span>Meta na Pista</span> · Estratégia Loteria · <span>Bate-Papo da Baixada</span> · Mercado de Usados · <span>Despertador Inteligente</span> · Serviços e Mão de Obra · <span>Político na Lupa</span> · SaaS Social ·
-    <span>Meta na Pista</span> · Estratégia Loteria · <span>Bate-Papo da Baixada</span> · Mercado de Usados · <span>Despertador Inteligente</span> · Serviços e Mão de Obra · <span>Político na Lupa</span> · SaaS Social ·
+    <span>Meta na Pista</span> · Estratégia Loteria · <span>Os sinitros são de bel</span> · Eae, meritiense! · <span>Despertador Inteligente</span> · Bingo Sorteador · <span>SaaS Social</span> · Web e Apps ·
+    <span>Meta na Pista</span> · Estratégia Loteria · <span>Os sinitros são de bel</span> · Eae, meritiense! · <span>Despertador Inteligente</span> · Bingo Sorteador · <span>SaaS Social</span> · Web e Apps ·
   </div>
 </div>
 
-<!-- SOBRE -->
 <section id="sobre">
-  <span class="section-tag">// 001 · Sobre</span>
-  <h2 class="section-title">Olá, eu sou<br><span style="color:var(--accent)">Leandro</span></h2>
+  <span class="section-tag">// 001 · Sobre a Empresa</span>
+  <h2 class="section-title">Nós somos a<br><span style="color:var(--accent)">LMTR</span></h2>
   <div class="sobre-grid">
-    <div class="sobre-foto fade-up">
-      <div class="foto-icon">📸</div>
-      <span class="foto-label">Foto do Desenvolvedor</span>
-      <span style="font-size:0.72rem; margin-top:8px;">[ Espaço reservado para sua foto ]</span>
+    <div class="sobre-foto fade-up" style="border:none; background:transparent;">
+      <div style="width:100%; height:100%; background:var(--surface2); border: 1px solid var(--border); border-radius: 20px; display:flex; align-items:center; justify-content:center; flex-direction:column; padding:20px;">
+          <div style="font-family:'Syne', sans-serif; font-size:4rem; font-weight:900; color:var(--text);">LM<span style="color:var(--accent);">T</span>R</div>
+          <p style="font-family:'Space Mono', monospace; font-size:0.7rem; color:var(--muted); letter-spacing:2px; margin-top:10px;">SOFTWARE HOUSE</p>
+      </div>
     </div>
     <div class="sobre-texto fade-up stagger-2">
-      <h2>Desenvolvedor independente da Baixada Fluminense</h2>
+      <h2>Inovação nascida na Baixada Fluminense</h2>
       <p>
-        Sou Leandro, fundador da LMTR — uma empresa de desenvolvimento de software criada com um propósito claro: <strong style="color:var(--text)">resolver problemas reais das pessoas ao redor</strong>.
+        A <strong>LMTR</strong> é uma empresa de tecnologia em franca expansão, focada no desenvolvimento web e de aplicativos mobile. Nosso propósito é claro: <strong style="color:var(--text)">resolver problemas reais através de soluções tecnológicas acessíveis e eficientes</strong>.
       </p>
       <p>
-        Nasci e cresci na Baixada Fluminense. Esse contexto moldou minha visão: aqui existe muita demanda por tecnologia acessível, mas poucas soluções pensadas de verdade para quem vive essa realidade. Foi daí que surgiram os meus projetos.
+        Acreditamos que a inovação não precisa ser distante ou complexa. Nascidos na Baixada Fluminense, entendemos que existe uma grande demanda por ferramentas tecnológicas adaptadas ao ritmo frenético da vida real, mas poucas soluções são pensadas de verdade para quem vive essa realidade. 
       </p>
       <p>
-        Comecei desenvolvendo o <strong style="color:var(--accent)">Meta na Pista</strong>, um gerenciador financeiro para motoristas de aplicativo, e o <strong style="color:var(--accent)">Estratégia Loteria</strong>. Hoje o ecossistema LMTR cresce com novos projetos em desenvolvimento que conectam, informam e organizam a vida real das pessoas.
-      </p>
-      <p style="font-size:0.88rem; font-style:italic; color:var(--muted); border-left:3px solid var(--accent2); padding-left:16px; margin-top:24px;">
-        "Não esperei a tecnologia chegar até mim. Aprendi a construir o que precisava."
+        Com uma arquitetura robusta e foco na experiência do usuário, a LMTR projeta ecossistemas inteiros. Desde o <strong style="color:var(--accent)">Meta na Pista</strong>, revolucionando a gestão para motoristas, até o <strong style="color:var(--accent)">Estratégia Loteria</strong> com motores estatísticos avançados, estamos construindo a próxima geração de utilitários de bolso. E em breve, nossos produtos estarão desembarcando na Apple Store.
       </p>
       <div class="sobre-stats" style="margin-top:36px;">
         <div class="stat-box">
-          <span class="stat-number">5+</span>
-          <span class="stat-label">Apps lançados</span>
+          <span class="stat-number">Web/App</span>
+          <span class="stat-label">Foco de Desenvolvimento</span>
         </div>
         <div class="stat-box">
           <span class="stat-number">BF</span>
           <span class="stat-label">Baixada Fluminense · RJ</span>
         </div>
         <div class="stat-box">
-          <span class="stat-number">Android</span>
-          <span class="stat-label">Plataforma principal</span>
+          <span class="stat-number">Offline-First</span>
+          <span class="stat-label">Arquitetura Segura</span>
         </div>
         <div class="stat-box">
           <span class="stat-number">100%</span>
-          <span class="stat-label">Independente</span>
-        </div>
-      </div>
-
-      <!-- GALERIA DE FOTOS -->
-      <div style="margin-top:32px;">
-        <p style="font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; font-family:'Space Mono',monospace;">Galeria · Trajetória</p>
-        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
-          <div style="aspect-ratio:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--muted);text-align:center;padding:8px;">Foto 1</div>
-          <div style="aspect-ratio:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--muted);text-align:center;padding:8px;">Foto 2</div>
-          <div style="aspect-ratio:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--muted);text-align:center;padding:8px;">Foto 3</div>
+          <span class="stat-label">Inovação Independente</span>
         </div>
       </div>
     </div>
@@ -758,38 +749,37 @@
 
 <div class="full-divider"></div>
 
-<!-- APPS ATUAIS -->
 <section id="apps">
   <div class="apps-header">
     <div>
       <span class="section-tag">// 002 · Produtos</span>
       <h2 class="section-title">Apps na Play Store</h2>
     </div>
-    <p class="section-sub" style="max-width:340px;">Aplicativos publicados e disponíveis para download agora.</p>
+    <p class="section-sub" style="max-width:340px;">Aplicativos publicados, em constante atualização e disponíveis para download agora.</p>
   </div>
 
   <div class="apps-grid">
 
-    <!-- META NA PISTA – FEATURED -->
     <div class="app-card featured fade-up" style="--card-accent:#00ffb2;">
       <div>
         <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
-          <div class="app-icon">🚗</div>
+          <div class="app-icon" style="background:transparent; border:none;">
+              <img src="meta-na-pista.png" alt="Icone Meta na Pista">
+          </div>
           <div>
             <span class="app-tag">Disponível · Play Store</span>
             <h3 class="app-name">Meta na Pista</h3>
           </div>
         </div>
         <p class="app-desc">
-          O gerenciador financeiro definitivo para motoristas de aplicativo. Acompanhe suas metas, lucros, custos de manutenção e documentos com precisão. O app que faz o motorista entender de verdade quanto ele ganha — e quanto ele gasta.
+          O gerenciador financeiro definitivo para motoristas de aplicativo. Acompanhe suas metas, lucros, custos de manutenção e documentos com precisão. Desenvolvido com uma <strong>arquitetura Híbrida Offline-First</strong>, ele permite o uso pleno em áreas sem internet, enquanto integra um forte sistema de métricas, widgets nativos, geração de PDF de faturamento e proteção contra manipulação de relógios para assegurar o sistema de contas Premium (via Google Play Billing).
         </p>
         <ul class="app-features" style="margin-top:20px;">
           <li>Controle de ganhos por plataforma (Uber, 99, iFood etc.)</li>
           <li>Manutenção preventiva automatizada por KM</li>
-          <li>Metas diárias com barra de progresso animada</li>
+          <li>Gestão Inteligente Preditiva de Banca</li>
           <li>Widget nativo para tela inicial do Android</li>
           <li>Relatório anual em PDF exportável</li>
-          <li>Gestão de Banca Inteligente para motoristas</li>
         </ul>
         <div class="app-links">
           <a href="https://play.google.com/store/apps/details?id=com.lmtr.metanapista" target="_blank" class="store-btn">
@@ -798,57 +788,43 @@
         </div>
       </div>
       <div class="app-mockup">
-        <span style="font-size:2rem;">📱</span>
-        <span style="font-size:0.7rem;color:var(--muted);">[ Print do App ]<br>Espaço para screenshot ]</span>
+        <img src="celular-meta-na-pista.png" alt="Tela Meta na Pista">
+        <img src="celular-meta-na-pista2.png" alt="Tela Meta na Pista 2">
       </div>
     </div>
 
-    <!-- ESTRATÉGIA LOTERIA -->
-    <div class="app-card fade-up stagger-1" style="--card-accent:#7c5cfc;">
-      <div style="display:flex;align-items:center;gap:14px;">
-        <div class="app-icon">🍀</div>
-        <div>
-          <span class="app-tag" style="color:var(--accent2);background:rgba(124,92,252,0.08);border-color:rgba(124,92,252,0.2);">Disponível · Play Store</span>
-          <h3 class="app-name">Estratégia Loteria</h3>
+    <div class="app-card featured fade-up stagger-1" style="--card-accent:#7c5cfc;">
+      <div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+          <div class="app-icon" style="background:transparent; border:none;">
+              <img src="estrategia-loteria.png" alt="Icone Estratégia Loteria">
+          </div>
+          <div>
+            <span class="app-tag" style="color:var(--accent2);background:rgba(124,92,252,0.08);border-color:rgba(124,92,252,0.2);">Disponível · Play Store</span>
+            <h3 class="app-name">Estratégia Loteria</h3>
+          </div>
+        </div>
+        <div class="cover-banner">
+            <img src="capa-estrategia-literia.png" alt="Capa Estratégia Loteria">
+        </div>
+        <p class="app-desc">
+          Um software de altíssimo desempenho para análise de jogos das Loterias Caixa. A arquitetura engloba potentes <strong>Motores Estatísticos Client-Side</strong> (Fibonacci, Grabovoi, Análise de Frequência) para gerar e cruzar dezenas localmente. Destaque para o sistema de "Bolão entre Amigos", que utiliza uma infraestrutura <em>Serverless (Firebase)</em> para hospedar os palpites temporariamente na nuvem, permitindo que os usuários os importem com um clique usando o nosso ecossistema de <em>Deep Linking</em> seguro (Android Intents).
+        </p>
+        <ul class="app-features" style="margin-top:20px;">
+          <li>Motores matemáticos: Fibonacci, Frequência Quente/Fria e Unificado</li>
+          <li>Conferência autônoma e inteligente de resultados oficiais</li>
+          <li>Compartilhamento de cotas de bolões com importação por link ou código</li>
+          <li>Interface analítica com gráficos de assertividade (IA local)</li>
+        </ul>
+        <div class="app-links">
+          <a href="https://play.google.com/store/apps/details?id=com.lmtr.SorteadorDeLoteria" target="_blank" class="store-btn">
+            ▶ Google Play Store
+          </a>
         </div>
       </div>
-      <p class="app-desc">
-        Motor estatístico para geração de palpites nas Loterias Caixa. Fibonacci, Grabovoi, análise de frequência e bolão entre amigos — tudo num só lugar.
-      </p>
-      <ul class="app-features">
-        <li>Motor matemático com Fibonacci e Grabovoi</li>
-        <li>Suporte a todas as loterias da Caixa</li>
-        <li>Bolão entre amigos com link de importação</li>
-        <li>Conferência automática de resultados</li>
-      </ul>
-      <div class="app-links">
-        <a href="https://play.google.com/store/apps/details?id=com.lmtr.SorteadorDeLoteria" target="_blank" class="store-btn">
-          ▶ Google Play Store
-        </a>
-      </div>
-    </div>
-
-    <!-- DESPERTADOR INTELIGENTE -->
-    <div class="app-card fade-up stagger-2" style="--card-accent:#ff9a3c;">
-      <div style="display:flex;align-items:center;gap:14px;">
-        <div class="app-icon">⏰</div>
-        <div>
-          <span class="app-tag" style="color:#ff9a3c;background:rgba(255,154,60,0.08);border-color:rgba(255,154,60,0.2);">Android</span>
-          <h3 class="app-name">Despertador Inteligente</h3>
-        </div>
-      </div>
-      <p class="app-desc">
-        Muito mais que um alarme. Um assistente matinal integrado com avisos essenciais, lembretes personalizados e informações úteis para começar o dia organizado.
-      </p>
-      <ul class="app-features">
-        <li>Sistema integrado de lembretes e avisos</li>
-        <li>Informações úteis ao acordar</li>
-        <li>Personalização completa por rotina</li>
-      </ul>
-      <div class="app-links">
-        <a href="https://play.google.com/store/search?q=lmtr&c=apps" target="_blank" class="store-btn">
-          ▶ Ver na Play Store
-        </a>
+      <div class="app-mockup">
+        <img src="celular-estrategia-loteria.png" alt="Tela Estratégia Loteria">
+        <img src="celular-estrategia-loteria2.png" alt="Tela Estratégia Loteria 2">
       </div>
     </div>
 
@@ -857,77 +833,65 @@
 
 <div class="full-divider"></div>
 
-<!-- MANIFESTO -->
-<div class="manifesto">
-  <div class="manifesto-inner fade-up">
-    <blockquote>
-      "Toda solução que construo <span>nasce de um problema real</span> que eu vi alguém próximo enfrentar. <em>Tecnologia sem propósito</em> é só código."
-    </blockquote>
-    <p class="manifesto-author">— Leandro · Fundador da LMTR</p>
-  </div>
-</div>
-
-<!-- PROJETOS FUTUROS -->
 <section id="futuros">
   <span class="section-tag">// 003 · Em Desenvolvimento</span>
   <h2 class="section-title">Próximos<br>Projetos</h2>
-  <p class="section-sub">O ecossistema LMTR está em expansão. Veja o que vem por aí:</p>
+  <p class="section-sub">O ecossistema LMTR está em rápida expansão, com foco contínuo em facilitação diária, ferramentas locais e mercado B2B.</p>
 
   <div class="upcoming-grid">
 
     <div class="upcoming-card fade-up">
       <span class="upcoming-badge">Em breve</span>
-      <div class="upcoming-icon">💬</div>
-      <h3 class="upcoming-title">Bate-Papo da Baixada Fluminense</h3>
+      <div class="upcoming-icon">⏰</div>
+      <h3 class="upcoming-title">Despertador Inteligente</h3>
       <p class="upcoming-desc">
-        Um aplicativo de comunicação criado exclusivamente para a comunidade da Baixada Fluminense. Conectando moradores, fortale­cendo a identidade local e encurtando distâncias com tecnologia feita para quem é daqui.
+        Um assistente matinal revolucionário que vai além de simplesmente tocar um alarme. Ele informa com clareza a agenda e as pendências essenciais para o seu dia — como ir ao mercado ou o horário de buscar as crianças na escola — ajudando a resolver o cotidiano de forma proativa.
       </p>
     </div>
 
     <div class="upcoming-card fade-up stagger-1">
       <span class="upcoming-badge">Em desenvolvimento</span>
-      <div class="upcoming-icon">📊</div>
-      <h3 class="upcoming-title">SaaS de Gestão de Redes Sociais</h3>
+      <div class="upcoming-icon">🗣️</div>
+      <h3 class="upcoming-title">Os Sinitros são de Bel</h3>
       <p class="upcoming-desc">
-        Plataforma completa para pequenos negócios e criadores de conteúdo gerenciarem todas as suas redes em um único painel. Agendamento, análise de métricas, relatórios e automações inteligentes sem precisar de agência.
+        Uma rede social e canal de serviços desenvolvido exclusivamente para o município de <strong>Belford Roxo</strong>. Com bate-papo integrado entre moradores, divulgação de notícias vitais em tempo real, avisos de comunidade e muito mais. Tecnologia hiperlocal feita sob medida.
       </p>
     </div>
 
     <div class="upcoming-card fade-up stagger-2">
-      <span class="upcoming-badge">Pesquisa</span>
-      <div class="upcoming-icon">🏛️</div>
-      <h3 class="upcoming-title">Político na Lupa</h3>
+      <span class="upcoming-badge">Em desenvolvimento</span>
+      <div class="upcoming-icon">📢</div>
+      <h3 class="upcoming-title">Eae, meritiense!</h3>
       <p class="upcoming-desc">
-        Plataforma de transparência política. Saiba tudo sobre os mandatos, votações, gastos e histórico dos seus representantes. Informação clara e acessível para o cidadão comum acompanhar quem governa sua cidade, estado e país.
+        A plataforma-irmã dedicada a <strong>São João de Meriti</strong>. Focada em integrar os moradores da região com um sistema de chat fluído, murais de avisos da cidade, trânsito, oportunidades locais e cobertura jornalística comunitária em primeira mão.
       </p>
     </div>
 
     <div class="upcoming-card fade-up">
-      <span class="upcoming-badge">Em breve</span>
-      <div class="upcoming-icon">🛒</div>
-      <h3 class="upcoming-title">Mercado de Usados</h3>
+      <span class="upcoming-badge">Pesquisa e Design</span>
+      <div class="upcoming-icon">🎟️</div>
+      <h3 class="upcoming-title">Bingo & Sorteador Cloud</h3>
       <p class="upcoming-desc">
-        Marketplace hiperlocal para compra e venda de itens usados. Prático, seguro e pensado para conectar vizinhos. Incentivando a economia circular e o consumo consciente na comunidade.
+        Um sistema moderno para sorteios e bingos onde o usuário poderá gerar, compartilhar e gerenciar as cartelas e cotas de participantes tudo de forma digital. Acompanhe os resultados na palma da mão, eliminando 100% da necessidade de papel ou planilhas desorganizadas.
       </p>
     </div>
 
     <div class="upcoming-card fade-up stagger-1">
-      <span class="upcoming-badge">Planejado</span>
-      <div class="upcoming-icon">🔧</div>
-      <h3 class="upcoming-title">Serviços e Mão de Obra</h3>
+      <span class="upcoming-badge">Planejado / B2B</span>
+      <div class="upcoming-icon">📊</div>
+      <h3 class="upcoming-title">SaaS de Gestão de Fluxo</h3>
       <p class="upcoming-desc">
-        Conectando quem precisa resolver um problema com quem sabe fazer. Eletricistas, encanadores, pedreiros e outros profissionais da região com sistema de avaliação, portfólio e agendamento.
+        Construção de um robusto <em>Software as a Service</em> (SaaS) empresarial para controle de fluxo e gestão avançada de redes sociais. O sistema focará primeiramente na automação e métricas do <strong>Instagram</strong>, com integração projetada futuramente para Facebook e TikTok.
       </p>
     </div>
 
     <div class="upcoming-card fade-up stagger-2" style="background: linear-gradient(135deg, rgba(0,255,178,0.04), var(--surface2)); border-color: rgba(0,255,178,0.15);">
       <span class="upcoming-badge" style="background:rgba(0,255,178,0.1); border-color:rgba(0,255,178,0.3); color:var(--accent);">Aberto</span>
-      <div class="upcoming-icon">💡</div>
-      <h3 class="upcoming-title">Tem uma ideia?</h3>
+      <div class="upcoming-icon">🌐</div>
+      <h3 class="upcoming-title">Web & Apple Store</h3>
       <p class="upcoming-desc">
-        Estou sempre de olho em problemas reais que pedem solução tecnológica. Se você tem uma dor que virou rotina e acha que daria um bom produto, me conta. Seria um prazer conversar.
+        Temos diversos projetos de sistemas e plataformas para Web no radar da LMTR. Além disso, a arquitetura moderna dos nossos aplicativos mobile atuais está sendo migrada para que muito em breve estejam todos disponíveis no ecossistema <strong>iOS (Apple Store)</strong>.
       </p>
-      <a href="#contato" class="btn-primary" style="margin-top:20px;font-size:0.85rem;padding:10px 20px;">Falar com Leandro →</a>
     </div>
 
   </div>
@@ -935,17 +899,25 @@
 
 <div class="full-divider"></div>
 
-<!-- REDES SOCIAIS -->
+<div class="manifesto">
+  <div class="manifesto-inner fade-up">
+    <blockquote>
+      "Toda solução que a <span>LMTR</span> constrói nasce da vontade de transformar rotinas reais. Desenvolvemos ecossistemas, não apenas <em>códigos.</em>"
+    </blockquote>
+    <p class="manifesto-author">— Visão LMTR</p>
+  </div>
+</div>
+
 <section id="social">
   <span class="section-tag">// 004 · Redes Sociais</span>
-  <h2 class="section-title">Me encontre<br>online</h2>
-  <p class="section-sub">Acompanhe o desenvolvimento dos projetos, bastidores e novidades da LMTR.</p>
+  <h2 class="section-title">Acompanhe a<br>LMTR online</h2>
+  <p class="section-sub">Veja o desenvolvimento dos projetos, os bastidores da tecnologia e as novidades que estamos construindo.</p>
 
   <div class="social-grid">
-    <a href="https://youtube.com/@LMTR" target="_blank" class="social-card" style="--social-color:#ff0000;">
+    <a href="https://www.youtube.com/@LeandroSilva-ef7qu" target="_blank" class="social-card" style="--social-color:#ff0000;">
       <div class="social-icon">▶</div>
       <span class="social-name">YouTube</span>
-      <span class="social-handle">@LMTR</span>
+      <span class="social-handle">Canal LMTR</span>
       <span style="font-size:0.75rem;color:var(--muted);">Tutoriais e bastidores</span>
     </a>
     <a href="https://instagram.com/lmtr.dev" target="_blank" class="social-card" style="--social-color:#e1306c;">
@@ -960,7 +932,7 @@
       <span class="social-handle">@lmtr.dev</span>
       <span style="font-size:0.75rem;color:var(--muted);">Dev life e dicas</span>
     </a>
-    <a href="https://wa.me/55SEUNUMERO" target="_blank" class="social-card" style="--social-color:#25d366;">
+    <a href="https://wa.me/5521971699809" target="_blank" class="social-card" style="--social-color:#25d366;">
       <div class="social-icon">💬</div>
       <span class="social-name">WhatsApp</span>
       <span class="social-handle">Contato direto</span>
@@ -968,43 +940,38 @@
     </a>
   </div>
 
-  <!-- YouTube Embed Placeholder -->
   <div style="margin-top:40px; background:var(--surface2); border:1px solid var(--border); border-radius:16px; overflow:hidden;">
     <div style="padding:24px 28px; border-bottom:1px solid var(--border); display:flex;align-items:center;gap:14px;">
       <div style="width:36px;height:36px;background:#ff0000;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.9rem;">▶</div>
       <div>
         <p style="font-weight:600;font-size:0.95rem;">Canal LMTR no YouTube</p>
-        <p style="font-size:0.78rem;color:var(--muted);">Substitua o ID abaixo pelo seu canal real</p>
+        <p style="font-size:0.78rem;color:var(--muted);">Vídeo em destaque</p>
       </div>
     </div>
-    <div style="position:relative;width:100%;padding-bottom:45%;background:#000;">
+    <div style="position:relative;width:100%;padding-bottom:56.25%;background:#000;">
       <iframe
         style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
-        src="https://www.youtube.com/embed?listType=user_uploads&list=LMTR"
+        src="https://www.youtube.com/embed/Fc731XiEIwI"
         title="Canal LMTR YouTube"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
-      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);color:var(--muted);font-size:0.85rem;text-align:center;padding:20px;">
-        ▶ Cole aqui o ID do seu canal YouTube para exibir os vídeos
-      </div>
     </div>
   </div>
 </section>
 
 <div class="full-divider"></div>
 
-<!-- CONTATO -->
 <section id="contato">
   <span class="section-tag">// 005 · Contato</span>
-  <h2 class="section-title">Vamos<br>conversar?</h2>
-  <p class="section-sub">Parcerias, sugestões de produtos, feedback ou só um oi — pode mandar.</p>
+  <h2 class="section-title">Fale com a<br>LMTR</h2>
+  <p class="section-sub">Parcerias de negócios, sugestões de produtos, dúvidas técnicas ou feedback — entre em contato.</p>
 
   <div class="contact-grid">
     <form class="contact-form fade-up" onsubmit="handleForm(event)">
       <div class="form-group">
         <label>Seu nome</label>
-        <input type="text" placeholder="Como posso te chamar?" required>
+        <input type="text" placeholder="Como podemos te chamar?" required>
       </div>
       <div class="form-group">
         <label>E-mail</label>
@@ -1014,11 +981,10 @@
         <label>Assunto</label>
         <select>
           <option value="">Selecione um assunto</option>
-          <option>Parceria / Negócio</option>
-          <option>Sugestão de produto</option>
-          <option>Suporte aos apps</option>
+          <option>Parceria / Negócios B2B</option>
+          <option>Sugestão de produto/app</option>
+          <option>Suporte (Meta na Pista / Estratégia Loteria)</option>
           <option>Contato geral</option>
-          <option>Imprensa</option>
         </select>
       </div>
       <div class="form-group">
@@ -1026,52 +992,44 @@
         <textarea placeholder="Conte o que você tem em mente..." required></textarea>
       </div>
       <button type="submit" class="form-submit">Enviar Mensagem →</button>
-      <p id="form-msg" style="display:none;font-size:0.85rem;color:var(--accent);text-align:center;margin-top:8px;">✓ Mensagem enviada! Retorno em breve.</p>
+      <p id="form-msg" style="display:none;font-size:0.85rem;color:var(--accent);text-align:center;margin-top:8px;">✓ Mensagem enviada! A equipe LMTR retornará em breve.</p>
     </form>
 
     <div class="contact-info fade-up stagger-2">
       <div class="contact-info-item">
         <div class="contact-info-icon">✉️</div>
         <div class="contact-info-text">
-          <strong>E-mail</strong>
+          <strong>E-mail Comercial & Suporte</strong>
           <a href="mailto:lmtr.contato@gmail.com">lmtr.contato@gmail.com</a>
         </div>
       </div>
       <div class="contact-info-item">
         <div class="contact-info-icon">💬</div>
         <div class="contact-info-text">
-          <strong>WhatsApp</strong>
-          <a href="https://wa.me/55SEUNUMERO" target="_blank">Clique para abrir conversa</a>
+          <strong>WhatsApp Empresarial</strong>
+          <a href="https://wa.me/5521971699809" target="_blank">Clique para abrir conversa</a>
         </div>
       </div>
       <div class="contact-info-item">
         <div class="contact-info-icon">📍</div>
         <div class="contact-info-text">
-          <strong>Localização</strong>
+          <strong>Sede</strong>
           <span>Baixada Fluminense · Rio de Janeiro, Brasil</span>
         </div>
       </div>
-      <div class="contact-info-item">
-        <div class="contact-info-icon">🕐</div>
-        <div class="contact-info-text">
-          <strong>Resposta</strong>
-          <span>Geralmente em até 48 horas úteis</span>
-        </div>
-      </div>
 
-      <!-- Play Store Link Block -->
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:4px;">
         <p style="font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-family:'Space Mono',monospace;">Apps na Play Store</p>
         <div style="display:flex;flex-direction:column;gap:10px;">
           <a href="https://play.google.com/store/apps/details?id=com.lmtr.metanapista" target="_blank" style="display:flex;align-items:center;gap:12px;text-decoration:none;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:9px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='#00ffb2'" onmouseout="this.style.borderColor='var(--border)'">
-            <span style="font-size:1.2rem;">🚗</span>
+            <span style="font-size:1.2rem; width:24px; height:24px; border-radius:4px; overflow:hidden;"><img src="meta-na-pista.png" style="width:100%; height:100%; object-fit:cover;"></span>
             <div>
               <p style="font-size:0.85rem;font-weight:600;color:var(--text);">Meta na Pista</p>
               <p style="font-size:0.72rem;color:var(--muted);">Google Play Store →</p>
             </div>
           </a>
           <a href="https://play.google.com/store/apps/details?id=com.lmtr.SorteadorDeLoteria" target="_blank" style="display:flex;align-items:center;gap:12px;text-decoration:none;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:9px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='#7c5cfc'" onmouseout="this.style.borderColor='var(--border)'">
-            <span style="font-size:1.2rem;">🍀</span>
+            <span style="font-size:1.2rem; width:24px; height:24px; border-radius:4px; overflow:hidden;"><img src="estrategia-loteria.png" style="width:100%; height:100%; object-fit:cover;"></span>
             <div>
               <p style="font-size:0.85rem;font-weight:600;color:var(--text);">Estratégia Loteria</p>
               <p style="font-size:0.72rem;color:var(--muted);">Google Play Store →</p>
@@ -1083,17 +1041,16 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <a href="#" class="footer-logo">LM<span>T</span>R</a>
   <ul class="footer-links">
-    <li><a href="#sobre">Sobre</a></li>
-    <li><a href="#apps">Apps</a></li>
+    <li><a href="#sobre">A Empresa</a></li>
+    <li><a href="#apps">Aplicativos</a></li>
     <li><a href="#futuros">Projetos</a></li>
     <li><a href="#contato">Contato</a></li>
     <li><a href="https://sites.google.com/view/sorteadorloteria/início" target="_blank">Privacidade</a></li>
   </ul>
-  <p class="footer-copy">© 2025 LMTR · Todos os direitos reservados · Baixada Fluminense · RJ</p>
+  <p class="footer-copy">© 2026 LMTR · Todos os direitos reservados · Baixada Fluminense · RJ</p>
 </footer>
 
 <script>
