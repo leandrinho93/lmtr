@@ -240,6 +240,7 @@
   }
 
   .sobre-foto {
+    width: 100%;
     aspect-ratio: 3/4;
     background: var(--surface2);
     border-radius: 20px;
@@ -332,6 +333,12 @@
     grid-column: span 2;
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 40px;
+  }
+
+  .sobre-grid > *,
+  .app-card.featured > *,
+  .app-card > * {
+    min-width: 0;
   }
 
   /* INVERSÃO DE LAYOUT PARA DESKTOP */
@@ -1031,6 +1038,8 @@
         <option value="diadesorte">Dia de Sorte</option>
       </select>
 
+      <input type="number" id="consultaConcursoInput" placeholder="Número do concurso (obrigatório se colar jogos avulsos)" style="width:100%; padding:12px 14px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.9rem; margin-bottom:12px;">
+
       <textarea id="consultaInputTexto" placeholder="Cole aqui o código LMTR- ou os jogos copiados" style="width:100%; min-height:100px; padding:14px 18px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.9rem; resize:vertical; margin-bottom:14px;"></textarea>
 
       <button id="btnConsultarJogos" onclick="consultarJogosLMTR()" class="form-submit" style="background:var(--accent2); width:100%;">
@@ -1291,23 +1300,26 @@
 
   async function consultarJogosLMTR() {
     const texto = document.getElementById('consultaInputTexto').value.trim();
+    const concursoDigitado = document.getElementById('consultaConcursoInput').value.trim();
     const resultDiv = document.getElementById('consultaResultado');
     const btn = document.getElementById('btnConsultarJogos');
 
     if (!texto) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Cole um código ou os jogos antes de consultar.</p>'; return; }
 
-    let loteria, jogosArray, concursoInfo = null;
+    let loteria, jogosArray, concursoAlvo = null;
 
     if (texto.startsWith('LMTR-')) {
       const dados = decodificarBolaoLMTR(texto);
       if (dados.erro) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Código inválido.</p>'; return; }
       loteria = dados.loteria;
       jogosArray = dados.jogos;
-      concursoInfo = dados.concurso;
+      concursoAlvo = dados.concurso;
     } else {
       loteria = document.getElementById('consultaLoteriaSelect').value;
       if (!loteria) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Selecione a modalidade dos jogos colados.</p>'; return; }
+      if (!concursoDigitado) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Informe o número do concurso referente a esses jogos.</p>'; return; }
       jogosArray = texto.split('\n').filter(l => l.trim() !== '');
+      concursoAlvo = concursoDigitado;
     }
 
     if (!LOTERIAS_INFO[loteria]) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Modalidade não reconhecida.</p>'; return; }
@@ -1319,14 +1331,22 @@
     try {
       const snap = await dbLoteria.ref('api-loterias/sorteios/' + loteria).once('value');
       const bruto = snap.val();
-      if (!bruto) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Resultado ainda não disponível para essa modalidade.</p>'; btn.textContent = 'Consultar'; btn.disabled = false; return; }
+      if (!bruto) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Resultado ainda não disponível para essa modalidade.</p>'; btn.textContent = 'Consultar Resultado →'; btn.disabled = false; return; }
 
       const j = typeof bruto === 'string' ? JSON.parse(bruto) : bruto;
       const dezenasSorteadas = (j.dezenas || j.listaDezenas || []).map(Number);
-      const concursoApi = j.concurso || j.numero;
+      const concursoApi = Number(j.concurso || j.numero);
+      const concursoAlvoNum = Number(concursoAlvo);
 
-      if (concursoInfo && String(concursoInfo) !== String(concursoApi) && concursoInfo !== 'Atual') {
-        resultDiv.innerHTML = `<p style="color:#facc15;">⚠️ Este bolão é do concurso ${concursoInfo}, mas o resultado disponível é do concurso ${concursoApi}. Os acertos abaixo podem não corresponder ao sorteio correto.</p>`;
+      if (concursoAlvo && concursoAlvo !== 'Atual' && !isNaN(concursoAlvoNum)) {
+        if (concursoAlvoNum > concursoApi) {
+          resultDiv.innerHTML = `<p style="color:#facc15;">⏳ O concurso ${concursoAlvoNum} da ${LOTERIAS_INFO[loteria]} ainda não foi sorteado. O último concurso disponível é o ${concursoApi}.</p>`;
+          btn.textContent = 'Consultar Resultado →'; btn.disabled = false; return;
+        }
+        if (concursoAlvoNum < concursoApi) {
+          resultDiv.innerHTML = `<p style="color:#ff4f7a;">Não temos o concurso ${concursoAlvoNum} no nosso banco de dados. A consulta é limitada ao último concurso da Caixa (concurso ${concursoApi} da ${LOTERIAS_INFO[loteria]}).</p>`;
+          btn.textContent = 'Consultar Resultado →'; btn.disabled = false; return;
+        }
       }
 
       let html = `<div style="margin-top:16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;">`;
@@ -1357,7 +1377,7 @@
       resultDiv.innerHTML = '<p style="color:#ff4f7a;">Erro ao consultar. Verifique sua conexão.</p>';
     }
 
-    btn.textContent = 'Consultar';
+    btn.textContent = 'Consultar Resultado →';
     btn.disabled = false;
   }
 </script>
