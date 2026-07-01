@@ -1038,7 +1038,7 @@
         Cole abaixo o código do bolão (LMTR-...) ou os jogos que você copiou no app, para conferir os acertos sem precisar abrir o aplicativo.
       </p>
 
-      <select id="consultaLoteriaSelect" style="width:100%; padding:12px 14px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.9rem; margin-bottom:12px;">
+      <select id="consultaLoteriaSelect" onchange="document.getElementById('consultaConcursoInput').style.display = this.value ? 'block' : 'none';" style="width:100%; padding:12px 14px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.9rem; margin-bottom:12px;">
         <option value="">Código LMTR-</option>
         <option value="megasena">Mega-Sena</option>
         <option value="lotofacil">Lotofácil</option>
@@ -1051,7 +1051,7 @@
         <option value="diadesorte">Dia de Sorte</option>
       </select>
 
-      <input type="number" id="consultaConcursoInput" placeholder="Número do concurso (obrigatório se colar jogos avulsos)" style="width:100%; padding:12px 14px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.9rem; margin-bottom:12px;">
+      <input type="number" id="consultaConcursoInput" placeholder="Número do concurso" style="display:none; width:100%; padding:12px 14px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.9rem; margin-bottom:12px;">
 
       <textarea id="consultaInputTexto" placeholder="Cole aqui o código LMTR- ou os jogos copiados" style="width:100%; min-height:100px; padding:14px 18px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.9rem; resize:vertical; margin-bottom:14px;"></textarea>
 
