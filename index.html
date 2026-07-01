@@ -1004,6 +1004,42 @@
       </div>
     </div>
 
+    <div class="app-card fade-up stagger-2" style="--card-accent:#7c5cfc; grid-column: span 2;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px;">
+        <div class="app-icon" style="background:transparent; border:none;">
+          <img src="estrategia-loteria.png.png" alt="Icone Estratégia Loteria">
+        </div>
+        <div>
+          <span class="app-tag" style="color:var(--accent2);background:rgba(124,92,252,0.08);border-color:rgba(124,92,252,0.2);">Ferramenta</span>
+          <h3 class="app-name" style="font-size:1.2rem;">🔍 Consultar Bolão</h3>
+        </div>
+      </div>
+      <p class="app-desc" style="margin-bottom:18px;">
+        Cole abaixo o código do bolão (LMTR-...) ou os jogos que você copiou no app, para conferir os acertos sem precisar abrir o aplicativo.
+      </p>
+
+      <select id="consultaLoteriaSelect" style="width:100%; padding:12px 14px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.9rem; margin-bottom:12px;">
+        <option value="">Só necessário se colar jogos avulsos (não código)</option>
+        <option value="megasena">Mega-Sena</option>
+        <option value="lotofacil">Lotofácil</option>
+        <option value="lotomania">Lotomania</option>
+        <option value="quina">Quina</option>
+        <option value="duplasena">Dupla Sena</option>
+        <option value="supersete">Super Sete</option>
+        <option value="maismilionaria">+Milionária</option>
+        <option value="timemania">Timemania</option>
+        <option value="diadesorte">Dia de Sorte</option>
+      </select>
+
+      <textarea id="consultaInputTexto" placeholder="Cole aqui o código LMTR- ou os jogos copiados" style="width:100%; min-height:100px; padding:14px 18px; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.9rem; resize:vertical; margin-bottom:14px;"></textarea>
+
+      <button id="btnConsultarJogos" onclick="consultarJogosLMTR()" class="form-submit" style="background:var(--accent2); width:100%;">
+        Consultar Resultado →
+      </button>
+
+      <div id="consultaResultado"></div>
+    </div>
+
   </div>
 </section>
 
@@ -1208,6 +1244,123 @@
   <p class="footer-copy">© 2026 LMTR · Todos os direitos reservados · Belford Roxo · Rio de Janeiro · BR</p>
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+  if (!window.firebase.apps || !window.firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey: "AIzaSyAGrLhUWntveHvJ9TFZRDkMhGi1sqYKrz0",
+      authDomain: "estacao-de-comando-loteria.firebaseapp.com",
+      databaseURL: "https://estacao-de-comando-loteria-default-rtdb.firebaseio.com",
+      projectId: "estacao-de-comando-loteria",
+      storageBucket: "estacao-de-comando-loteria.firebasestorage.app",
+      messagingSenderId: "115426303577",
+      appId: "1:115426303577:web:31cfc1f3d77fde3be71b48"
+    });
+  }
+  const dbLoteria = firebase.database();
+
+  const LOTERIAS_INFO = {
+    megasena: 'Mega-Sena', lotofacil: 'Lotofácil', lotomania: 'Lotomania',
+    quina: 'Quina', duplasena: 'Dupla Sena', supersete: 'Super Sete',
+    maismilionaria: '+Milionária', timemania: 'Timemania', diadesorte: 'Dia de Sorte'
+  };
+
+  function decodificarBolaoLMTR(codigoStr) {
+    let cleanCode = codigoStr.trim();
+    if (!cleanCode.startsWith('LMTR-')) return { erro: true };
+    try {
+      let base64Part = cleanCode.replace('LMTR-', '');
+      let decodeUnicode = (str) => decodeURIComponent(Array.prototype.map.call(atob(str), c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+      let decodedRaw = decodeUnicode(base64Part);
+      let payload = {};
+      if (decodedRaw.includes('{"l":')) {
+        let json = JSON.parse(decodedRaw);
+        payload = { loteria: json.l, concurso: json.c, jogos: json.j };
+      } else {
+        let parts = decodedRaw.split(':');
+        if (parts.length >= 8) payload = { loteria: parts[0], concurso: parts[1], jogos: parts[7].split('~') };
+        else if (parts.length >= 7) payload = { loteria: parts[0], concurso: parts[1], jogos: parts[6].split('~') };
+        else if (parts.length >= 5) payload = { loteria: parts[0], concurso: parts[1], jogos: parts[4].split('~') };
+        else if (parts.length === 4) payload = { loteria: parts[0], concurso: parts[1], jogos: parts[3].split('~') };
+        else payload = { loteria: parts[0], concurso: parts[1], jogos: parts[2].split('~') };
+      }
+      return { sucesso: true, ...payload };
+    } catch (e) { return { erro: true }; }
+  }
+
+  async function consultarJogosLMTR() {
+    const texto = document.getElementById('consultaInputTexto').value.trim();
+    const resultDiv = document.getElementById('consultaResultado');
+    const btn = document.getElementById('btnConsultarJogos');
+
+    if (!texto) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Cole um código ou os jogos antes de consultar.</p>'; return; }
+
+    let loteria, jogosArray, concursoInfo = null;
+
+    if (texto.startsWith('LMTR-')) {
+      const dados = decodificarBolaoLMTR(texto);
+      if (dados.erro) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Código inválido.</p>'; return; }
+      loteria = dados.loteria;
+      jogosArray = dados.jogos;
+      concursoInfo = dados.concurso;
+    } else {
+      loteria = document.getElementById('consultaLoteriaSelect').value;
+      if (!loteria) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Selecione a modalidade dos jogos colados.</p>'; return; }
+      jogosArray = texto.split('\n').filter(l => l.trim() !== '');
+    }
+
+    if (!LOTERIAS_INFO[loteria]) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Modalidade não reconhecida.</p>'; return; }
+
+    btn.textContent = 'Consultando...';
+    btn.disabled = true;
+    resultDiv.innerHTML = '';
+
+    try {
+      const snap = await dbLoteria.ref('api-loterias/sorteios/' + loteria).once('value');
+      const bruto = snap.val();
+      if (!bruto) { resultDiv.innerHTML = '<p style="color:#ff4f7a;">Resultado ainda não disponível para essa modalidade.</p>'; btn.textContent = 'Consultar'; btn.disabled = false; return; }
+
+      const j = typeof bruto === 'string' ? JSON.parse(bruto) : bruto;
+      const dezenasSorteadas = (j.dezenas || j.listaDezenas || []).map(Number);
+      const concursoApi = j.concurso || j.numero;
+
+      if (concursoInfo && String(concursoInfo) !== String(concursoApi) && concursoInfo !== 'Atual') {
+        resultDiv.innerHTML = `<p style="color:#facc15;">⚠️ Este bolão é do concurso ${concursoInfo}, mas o resultado disponível é do concurso ${concursoApi}. Os acertos abaixo podem não corresponder ao sorteio correto.</p>`;
+      }
+
+      let html = `<div style="margin-top:16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;">`;
+      html += `<p style="font-size:0.8rem;color:var(--muted);margin-bottom:10px;">${LOTERIAS_INFO[loteria]} · Concurso ${concursoApi}</p>`;
+      html += `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">`;
+      dezenasSorteadas.forEach(d => {
+        html += `<span style="width:30px;height:30px;border-radius:50%;background:var(--accent2);color:#080810;font-weight:700;font-size:0.75rem;display:flex;align-items:center;justify-content:center;">${String(d).padStart(2,'0')}</span>`;
+      });
+      html += `</div>`;
+
+      jogosArray.forEach((linha, i) => {
+        const numParte = linha.split('|')[0];
+        const nums = (numParte.match(/\d+/g) || []).map(Number);
+        const acertos = nums.filter(n => dezenasSorteadas.includes(n)).length;
+        const bolinhas = nums.map(n => {
+          const bateu = dezenasSorteadas.includes(n);
+          return `<span style="width:26px;height:26px;border-radius:50%;background:${bateu ? '#00ffb2' : 'rgba(255,255,255,0.06)'};color:${bateu ? '#080810' : 'var(--muted)'};font-weight:700;font-size:0.7rem;display:flex;align-items:center;justify-content:center;border:1px solid ${bateu ? '#00ffb2' : 'var(--border)'};">${String(n).padStart(2,'0')}</span>`;
+        }).join('');
+        html += `<div style="margin-bottom:10px;padding:10px;background:var(--surface2);border-radius:8px;">
+          <div style="font-size:0.75rem;color:var(--muted);margin-bottom:6px;">Jogo ${i+1} — <strong style="color:var(--accent);">${acertos} acerto(s)</strong></div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">${bolinhas}</div>
+        </div>`;
+      });
+      html += `</div>`;
+
+      resultDiv.innerHTML = html;
+    } catch (e) {
+      resultDiv.innerHTML = '<p style="color:#ff4f7a;">Erro ao consultar. Verifique sua conexão.</p>';
+    }
+
+    btn.textContent = 'Consultar';
+    btn.disabled = false;
+  }
+</script>
 <script>
   // LÓGICA DE GERAÇÃO DAS CHAVES PROMOCIONAIS (Muda a cada 15 dias)
   const promocoesMeta = [
